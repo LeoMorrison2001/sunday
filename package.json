@@ -1,13 +1,17 @@
 {
   "name": "sunday",
+  "private": true,
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
+    "dev": "concurrently -n \"CLIENT,SERVER\" -c \"blue,green\" \"pnpm --filter client dev\" \"pnpm --filter server dev\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@10.33.0",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }
