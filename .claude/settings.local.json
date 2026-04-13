@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp -r \"d:/HOME/my_project/material-ui-9.0.0/docs/data/material/getting-started/templates/dashboard\" \"d:/HOME/my_project/sunday/client/src/dashboard\")",
+      "Bash(cp -r \"d:/HOME/my_project/material-ui-9.0.0/docs/data/material/getting-started/templates/shared-theme\" \"d:/HOME/my_project/sunday/client/src/shared-theme\")",
+      "Bash(find \"d:/HOME/my_project/sunday/client/src/dashboard\" -name \"*.js\" -type f -delete)",
+      "Bash(find \"d:/HOME/my_project/sunday/client/src/shared-theme\" -name \"*.js\" -type f -delete)"
+    ]
+  }
+}
