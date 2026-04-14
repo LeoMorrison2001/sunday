@@ -29,6 +29,10 @@ const memorySubItems = [
     {text: '长期记忆', path: '/memory/long-term'},
 ];
 
+const settingsSubItems = [
+    {text: '模型管理', path: '/settings/model-management'},
+];
+
 export default function MenuContent() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -37,6 +41,9 @@ export default function MenuContent() {
     );
     const [agentOpen, setAgentOpen] = React.useState(
         location.pathname.startsWith('/agent'),
+    );
+    const [settingsOpen, setSettingsOpen] = React.useState(
+        location.pathname.startsWith('/settings'),
     );
 
     const isActive = (path: string) => location.pathname === path;
@@ -120,12 +127,30 @@ export default function MenuContent() {
               </ListItemButton>
           </ListItem>
 
-          {/* 设置 */}
+          {/* 设置 - expandable */}
           <ListItem disablePadding sx={{display: 'block'}}>
-              <ListItemButton selected={isActive('/settings')} onClick={() => navigate('/settings')}>
+              <ListItemButton
+                  selected={location.pathname.startsWith('/settings')}
+                  onClick={() => setSettingsOpen((prev) => !prev)}
+              >
                   <ListItemIcon><SettingsRoundedIcon/></ListItemIcon>
                   <ListItemText primary="设置"/>
+                  {settingsOpen ? <ExpandLessRoundedIcon/> : <ExpandMoreRoundedIcon/>}
               </ListItemButton>
+              <Collapse in={settingsOpen} timeout="auto" unmountOnExit>
+                  <List dense sx={{pl: 2}}>
+                      {settingsSubItems.map((item) => (
+                          <ListItem key={item.path} disablePadding sx={{display: 'block'}}>
+                              <ListItemButton
+                                  selected={isActive(item.path)}
+                                  onClick={() => navigate(item.path)}
+                              >
+                                  <ListItemText primary={item.text}/>
+                              </ListItemButton>
+                          </ListItem>
+                      ))}
+                  </List>
+              </Collapse>
           </ListItem>
       </List>
     </Stack>

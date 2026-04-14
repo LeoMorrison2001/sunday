@@ -23,7 +23,7 @@ import AgentServicePage from '../pages/AgentServicePage';
 import TaskLogPage from '../pages/TaskLogPage';
 import MCPPage from '../pages/McpPage';
 import SkillsPage from '../pages/SkillsPage';
-import SettingsPage from '../pages/SettingsPage';
+import ModelManagementPage from '../pages/ModelManagementPage';
 
 const xThemeComponents = {
   ...chartsCustomizations,
@@ -73,7 +73,8 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
                       <Route path="/agent/task-log" element={<TaskLogPage/>}/>
                       <Route path="/mcp" element={<MCPPage/>}/>
                       <Route path="/skills" element={<SkillsPage/>}/>
-                      <Route path="/settings" element={<SettingsPage/>}/>
+                      <Route path="/settings" element={<Navigate to="/settings/model-management" replace/>}/>
+                      <Route path="/settings/model-management" element={<ModelManagementPage/>}/>
                   </Routes>
               </Box>
           </Stack>

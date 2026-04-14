@@ -1,6 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "src/index.ts",
   "scripts": {
@@ -15,5 +16,11 @@
     "@types/node": "^25.6.0",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.14",
+    "ai": "^6.0.159",
+    "hono": "^4.12.12",
+    "zhipu-ai-provider": "^0.3.0"
   }
 }

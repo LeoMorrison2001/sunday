@@ -26,13 +26,14 @@ const breadcrumbMap: Record<string, string> = {
     '/agent/task-log': '任务日志',
     '/mcp': 'MCP',
     '/skills': 'Skills',
-    '/settings': '设置',
+    '/settings/model-management': '模型管理',
 };
 
 export default function NavbarBreadcrumbs() {
     const location = useLocation();
     const isMemory = location.pathname.startsWith('/memory');
     const isAgent = location.pathname.startsWith('/agent');
+    const isSettings = location.pathname.startsWith('/settings');
     const currentPage = breadcrumbMap[location.pathname] || 'Chat';
 
   return (
@@ -45,6 +46,9 @@ export default function NavbarBreadcrumbs() {
         )}
         {isAgent && (
             <Typography variant="body1">智能体管理</Typography>
+        )}
+        {isSettings && (
+            <Typography variant="body1">设置</Typography>
         )}
       <Typography variant="body1" sx={{ color: 'text.primary', fontWeight: 600 }}>
           {currentPage}
