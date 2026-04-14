@@ -10,6 +10,7 @@ import ListItemIcon, { listItemIconClasses } from '@mui/material/ListItemIcon';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MenuButton from './MenuButton';
+import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
 
 const MenuItem = styled(MuiMenuItem)({
   margin: '2px 0',
@@ -38,7 +39,6 @@ export default function OptionsMenu() {
         id="menu"
         open={open}
         onClose={handleClose}
-        onClick={handleClose}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         sx={{
@@ -53,10 +53,13 @@ export default function OptionsMenu() {
           },
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={handleClose}>
+          <ListItemText>主题切换</ListItemText>
+          <ListItemIcon sx={{ ml: 'auto', minWidth: 0 }}>
+            <ColorModeIconDropdown />
+          </ListItemIcon>
+        </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>Add another account</MenuItem>
         <MenuItem onClick={handleClose}>Settings</MenuItem>
         <Divider />
         <MenuItem
