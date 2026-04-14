@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -21,6 +21,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 
+const API = 'http://localhost:3001/api';
 const nativeTheme = createTheme();
 
 interface LlmModel {
@@ -30,23 +31,35 @@ interface LlmModel {
     api_key: string;
 }
 
-const PROVIDERS = ['openai', 'anthropic', 'google'];
-
-const initialModels: LlmModel[] = [
-    {id: 1, provider: 'openai', model_identifier: 'gpt-4o', api_key: 'sk-***...***abc'},
-    {id: 2, provider: 'anthropic', model_identifier: 'claude-sonnet-4-6', api_key: 'sk-ant-***...***def'},
-];
-
-let nextId = 3;
+interface Provider {
+    id: number;
+    provider: string;
+}
 
 const emptyForm = {provider: '', model_identifier: '', api_key: ''};
 
 export default function ModelManagementPage() {
-    const [models, setModels] = useState<LlmModel[]>(initialModels);
+    const [models, setModels] = useState<LlmModel[]>([]);
+    const [providers, setProviders] = useState<Provider[]>([]);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [editingId, setEditingId] = useState<number | null>(null);
     const [form, setForm] = useState(emptyForm);
     const [errors, setErrors] = useState<Record<string, string>>({});
+
+    const fetchModels = useCallback(async () => {
+        const res = await fetch(`${API}/llm-models`);
+        setModels(await res.json());
+    }, []);
+
+    const fetchProviders = useCallback(async () => {
+        const res = await fetch(`${API}/providers`);
+        setProviders(await res.json());
+    }, []);
+
+    useEffect(() => {
+        fetchModels();
+        fetchProviders();
+    }, [fetchModels, fetchProviders]);
 
     const openAddDialog = () => {
         setEditingId(null);
@@ -66,8 +79,9 @@ export default function ModelManagementPage() {
         setDialogOpen(true);
     };
 
-    const handleDelete = (id: number) => {
-        setModels((prev) => prev.filter((m) => m.id !== id));
+    const handleDelete = async (id: number) => {
+        await fetch(`${API}/llm-models/${id}`, {method: 'DELETE'});
+        fetchModels();
     };
 
     const validate = () => {
@@ -75,24 +89,32 @@ export default function ModelManagementPage() {
         if (!form.provider) newErrors.provider = '请选择厂商';
         if (!form.model_identifier) newErrors.model_identifier = '请输入模型标识';
         if (!form.api_key) newErrors.api_key = '请输入 API Key';
-        const duplicate = models.find(
-            (m) => m.model_identifier === form.model_identifier && m.id !== editingId,
-        );
-        if (duplicate) newErrors.model_identifier = '模型标识已存在';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!validate()) return;
         if (editingId !== null) {
-            setModels((prev) =>
-                prev.map((m) => (m.id === editingId ? {...m, ...form} : m)),
-            );
+            await fetch(`${API}/llm-models/${editingId}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(form),
+            });
         } else {
-            setModels((prev) => [...prev, {id: nextId++, ...form}]);
+            const res = await fetch(`${API}/llm-models`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(form),
+            });
+            if (res.status === 409) {
+                const data = await res.json();
+                setErrors({model_identifier: data.error});
+                return;
+            }
         }
         setDialogOpen(false);
+        fetchModels();
     };
 
     const maskApiKey = (key: string) => {
@@ -165,9 +187,9 @@ export default function ModelManagementPage() {
                             helperText={errors.provider}
                             fullWidth
                         >
-                            {PROVIDERS.map((p) => (
-                                <MenuItem key={p} value={p}>
-                                    {p}
+                            {providers.map((p) => (
+                                <MenuItem key={p.id} value={p.provider}>
+                                    {p.provider}
                                 </MenuItem>
                             ))}
                         </TextField>

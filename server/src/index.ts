@@ -3,9 +3,11 @@ import {Hono} from 'hono';
 import {cors} from 'hono/cors';
 import {convertToModelMessages, streamText, type UIMessage} from 'ai';
 import {createZhipu} from 'zhipu-ai-provider';
+import llmModelRouter from './modules/llm-model/llm-model.controller.js';
+import providerRouter from './modules/provider/provider.controller.js';
 
 const zhipu = createZhipu({
-    apiKey: '',
+    apiKey: '4206c3ae4b4445a58c850148e78af383.Ud0tFTH6WuZb8TMt',
     baseURL: 'https://open.bigmodel.cn/api/coding/paas/v4',
 });
 
@@ -21,6 +23,9 @@ app.post('/api/chat', async (c) => {
     });
     return result.toUIMessageStreamResponse();
 });
+
+app.route('/api/llm-models', llmModelRouter);
+app.route('/api/providers', providerRouter);
 
 serve({fetch: app.fetch, port: 3001}, (info) => {
     console.log(`🤖 Sunday Agent server running at http://localhost:${info.port}`);
