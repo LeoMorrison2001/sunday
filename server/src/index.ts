@@ -5,6 +5,9 @@ import {convertToModelMessages, streamText, type UIMessage} from 'ai';
 import {createZhipu} from 'zhipu-ai-provider';
 import llmModelRouter from './modules/llm-model/llm-model.controller.js';
 import providerRouter from './modules/provider/provider.controller.js';
+import metaMemoryRouter from './modules/meta-memory/meta-memory.controller.js';
+import mbtiTypeRouter from './modules/mbti-type/mbti-type.controller.js';
+import relationshipRouter from './modules/relationship/relationship.controller.js';
 
 const zhipu = createZhipu({
     apiKey: '4206c3ae4b4445a58c850148e78af383.Ud0tFTH6WuZb8TMt',
@@ -26,6 +29,9 @@ app.post('/api/chat', async (c) => {
 
 app.route('/api/llm-models', llmModelRouter);
 app.route('/api/providers', providerRouter);
+app.route('/api/meta-memory', metaMemoryRouter);
+app.route('/api/mbti-types', mbtiTypeRouter);
+app.route('/api/relationships', relationshipRouter);
 
 serve({fetch: app.fetch, port: 3001}, (info) => {
     console.log(`🤖 Sunday Agent server running at http://localhost:${info.port}`);
