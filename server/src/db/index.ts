@@ -111,6 +111,54 @@ db.exec(`
         UNIQUE
         NOT
         NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS agent_types
+    (
+        id
+        INTEGER
+        PRIMARY
+        KEY
+        AUTOINCREMENT,
+        name
+        TEXT
+        UNIQUE
+        NOT
+        NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS agents
+    (
+        id
+        INTEGER
+        PRIMARY
+        KEY
+        AUTOINCREMENT,
+        agent_key
+        TEXT
+        UNIQUE
+        NOT
+        NULL,
+        name
+        TEXT
+        NOT
+        NULL,
+        type
+        TEXT
+        NOT
+        NULL,
+        description
+        TEXT
+        NOT
+        NULL
+        DEFAULT
+        '',
+        instance_count
+        INTEGER
+        NOT
+        NULL
+        DEFAULT
+        0
     )
 `);
 
@@ -137,6 +185,13 @@ const relCount = (db.prepare('SELECT COUNT(*) as count FROM relationships').get(
 if (relCount === 0) {
     const insert = db.prepare('INSERT INTO relationships (name) VALUES (?)');
     ['主人', '爸爸', '妈妈', '朋友', '老师', '伴侣', '同事', '导师', '学生'].forEach(r => insert.run(r));
+}
+
+// 初始化智能体类型
+const agentTypeCount = (db.prepare('SELECT COUNT(*) as count FROM agent_types').get() as any).count;
+if (agentTypeCount === 0) {
+    const insert = db.prepare('INSERT INTO agent_types (name) VALUES (?)');
+    ['对话型', '任务型', '工具型', '工作流型'].forEach(t => insert.run(t));
 }
 
 export default db;

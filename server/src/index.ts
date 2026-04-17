@@ -8,6 +8,8 @@ import providerRouter from './modules/provider/provider.controller.js';
 import metaMemoryRouter from './modules/meta-memory/meta-memory.controller.js';
 import mbtiTypeRouter from './modules/mbti-type/mbti-type.controller.js';
 import relationshipRouter from './modules/relationship/relationship.controller.js';
+import agentTypeRouter from './modules/agent-type/agent-type.controller.js';
+import agentRouter from './modules/agent/agent.controller.js';
 
 const zhipu = createZhipu({
     apiKey: '4206c3ae4b4445a58c850148e78af383.Ud0tFTH6WuZb8TMt',
@@ -32,6 +34,8 @@ app.route('/api/providers', providerRouter);
 app.route('/api/meta-memory', metaMemoryRouter);
 app.route('/api/mbti-types', mbtiTypeRouter);
 app.route('/api/relationships', relationshipRouter);
+app.route('/api/agent-types', agentTypeRouter);
+app.route('/api/agents', agentRouter);
 
 serve({fetch: app.fetch, port: 3001}, (info) => {
     console.log(`🤖 Sunday Agent server running at http://localhost:${info.port}`);
