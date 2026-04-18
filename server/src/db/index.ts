@@ -159,6 +159,48 @@ db.exec(`
         NULL
         DEFAULT
         0
+    );
+
+    CREATE TABLE IF NOT EXISTS memory_types
+    (
+        id
+        INTEGER
+        PRIMARY
+        KEY
+        AUTOINCREMENT,
+        name
+        TEXT
+        UNIQUE
+        NOT
+        NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS source_types
+    (
+        id
+        INTEGER
+        PRIMARY
+        KEY
+        AUTOINCREMENT,
+        name
+        TEXT
+        UNIQUE
+        NOT
+        NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS memory_statuses
+    (
+        id
+        INTEGER
+        PRIMARY
+        KEY
+        AUTOINCREMENT,
+        name
+        TEXT
+        UNIQUE
+        NOT
+        NULL
     )
 `);
 
@@ -192,6 +234,27 @@ const agentTypeCount = (db.prepare('SELECT COUNT(*) as count FROM agent_types').
 if (agentTypeCount === 0) {
     const insert = db.prepare('INSERT INTO agent_types (name) VALUES (?)');
     ['对话型', '任务型', '工具型', '工作流型'].forEach(t => insert.run(t));
+}
+
+// 初始化记忆类型
+const memoryTypeCount = (db.prepare('SELECT COUNT(*) as count FROM memory_types').get() as any).count;
+if (memoryTypeCount === 0) {
+    const insert = db.prepare('INSERT INTO memory_types (name) VALUES (?)');
+    ['情景记忆', '语义记忆', '技能记忆'].forEach(t => insert.run(t));
+}
+
+// 初始化来源类型
+const sourceTypeCount = (db.prepare('SELECT COUNT(*) as count FROM source_types').get() as any).count;
+if (sourceTypeCount === 0) {
+    const insert = db.prepare('INSERT INTO source_types (name) VALUES (?)');
+    ['对话提取', '用户输入', '智能体归纳', '反思'].forEach(t => insert.run(t));
+}
+
+// 初始化记忆状态
+const memoryStatusCount = (db.prepare('SELECT COUNT(*) as count FROM memory_statuses').get() as any).count;
+if (memoryStatusCount === 0) {
+    const insert = db.prepare('INSERT INTO memory_statuses (name) VALUES (?)');
+    ['活跃', '衰减', '归档'].forEach(t => insert.run(t));
 }
 
 export default db;

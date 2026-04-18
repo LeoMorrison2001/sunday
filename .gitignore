@@ -40,3 +40,6 @@ pnpm-debug.log*
 # Testing
 coverage/
 /data/
+
+# Docs (local only)
+docs/
