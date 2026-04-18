@@ -201,6 +201,69 @@ db.exec(`
         UNIQUE
         NOT
         NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS long_term_memories
+    (
+        id
+        INTEGER
+        PRIMARY
+        KEY
+        AUTOINCREMENT,
+        content
+        TEXT
+        NOT
+        NULL,
+        type
+        TEXT
+        NOT
+        NULL,
+        source_type
+        TEXT
+        NOT
+        NULL
+        DEFAULT
+        '用户输入',
+        source_id
+        TEXT,
+        tags
+        TEXT,
+        importance
+        REAL
+        NOT
+        NULL
+        DEFAULT
+        0,
+        emotional_valence
+        REAL
+        NOT
+        NULL
+        DEFAULT
+        0,
+        access_count
+        INTEGER
+        NOT
+        NULL
+        DEFAULT
+        0,
+        last_accessed_at
+        TEXT,
+        context_snapshot
+        TEXT,
+        status
+        TEXT
+        NOT
+        NULL
+        DEFAULT
+        '活跃',
+        created_at
+        TEXT
+        DEFAULT
+        (datetime('now')),
+        updated_at
+        TEXT
+        DEFAULT
+        (datetime('now'))
     )
 `);
 
