@@ -14,6 +14,8 @@ import memoryTypeRouter from './modules/memory-type/memory-type.controller.js';
 import sourceTypeRouter from './modules/source-type/source-type.controller.js';
 import memoryStatusRouter from './modules/memory-status/memory-status.controller.js';
 import longTermMemoryRouter from './modules/long-term-memory/long-term-memory.controller.js';
+import taskStatusRouter from './modules/task-status/task-status.controller.js';
+import taskMemoryRouter from './modules/task-memory/task-memory.controller.js';
 
 const zhipu = createZhipu({
     apiKey: '4206c3ae4b4445a58c850148e78af383.Ud0tFTH6WuZb8TMt',
@@ -44,6 +46,8 @@ app.route('/api/memory-types', memoryTypeRouter);
 app.route('/api/source-types', sourceTypeRouter);
 app.route('/api/memory-statuses', memoryStatusRouter);
 app.route('/api/long-term-memories', longTermMemoryRouter);
+app.route('/api/task-statuses', taskStatusRouter);
+app.route('/api/task-memories', taskMemoryRouter);
 
 serve({fetch: app.fetch, port: 3001}, (info) => {
     console.log(`🤖 Sunday Agent server running at http://localhost:${info.port}`);

@@ -264,6 +264,57 @@ db.exec(`
         TEXT
         DEFAULT
         (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS task_statuses
+    (
+        id
+        INTEGER
+        PRIMARY
+        KEY
+        AUTOINCREMENT,
+        name
+        TEXT
+        UNIQUE
+        NOT
+        NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS task_memories
+    (
+        id
+        INTEGER
+        PRIMARY
+        KEY
+        AUTOINCREMENT,
+        content
+        TEXT
+        NOT
+        NULL,
+        cron_expression
+        TEXT
+        NOT
+        NULL,
+        status
+        TEXT
+        NOT
+        NULL
+        DEFAULT
+        '启用',
+        execution_count
+        INTEGER
+        NOT
+        NULL
+        DEFAULT
+        0,
+        created_at
+        TEXT
+        DEFAULT
+        (datetime('now')),
+        updated_at
+        TEXT
+        DEFAULT
+        (datetime('now'))
     )
 `);
 
@@ -318,6 +369,13 @@ const memoryStatusCount = (db.prepare('SELECT COUNT(*) as count FROM memory_stat
 if (memoryStatusCount === 0) {
     const insert = db.prepare('INSERT INTO memory_statuses (name) VALUES (?)');
     ['活跃', '衰减', '归档'].forEach(t => insert.run(t));
+}
+
+// 初始化任务状态
+const taskStatusCount = (db.prepare('SELECT COUNT(*) as count FROM task_statuses').get() as any).count;
+if (taskStatusCount === 0) {
+    const insert = db.prepare('INSERT INTO task_statuses (name) VALUES (?)');
+    ['启用', '关闭'].forEach(t => insert.run(t));
 }
 
 export default db;
